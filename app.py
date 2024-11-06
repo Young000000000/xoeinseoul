@@ -2,17 +2,12 @@ import streamlit as st
 import pandas as pd
 
 # Load data from CSV file
-def load_data(filename="xoeinseoul.csv"):
+def load_data(filename="garment_data.csv"):
     data = pd.read_csv(filename)
     return data
 
-# Display the table of all data
-def display_table(data):
-    st.title("상품 데이터 테이블")
-    st.write(data)
-
-# Display the daily summary
-def daily_summary(data):
+# Display the daily summary with overall sum table
+def display_daily_summary(data):
     st.title("Daily Summary")
     
     # Convert '판매일' to datetime if not already
@@ -24,18 +19,33 @@ def daily_summary(data):
         총판매액=('판매가격', 'sum')
     ).reset_index()
     
-    # Display daily summary
+    # Calculate overall summary
+    overall_summary = pd.DataFrame({
+        "전체 판매량": [daily_summary['판매량'].sum()],
+        "전체 판매액": [daily_summary['총판매액'].sum()]
+    })
+    
+    # Display overall summary at the top
+    st.write("### 전체 판매 요약")
+    st.write(overall_summary)
+    
+    # Display daily summary table
+    st.write("### 일별 판매 요약")
     st.write(daily_summary)
 
-# Load data from CSV 
+# Display the full data table without index
+def display_table(data):
+    st.title("상품 데이터 테이블")
+    st.write(data)
+
+# Load data from CSV
 data = load_data()
 
-# Streamlit sidebar for navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["상품 데이터 테이블", "Daily Summary"])
+# Create tabs with Daily Summary as the first tab
+tab1, tab2 = st.tabs(["Daily Summary", "상품 데이터 테이블"])
 
-# Load appropriate page
-if page == "상품 데이터 테이블":
+with tab1:
+    display_daily_summary(data)
+
+with tab2:
     display_table(data)
-elif page == "Daily Summary":
-    daily_summary(data)
