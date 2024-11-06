@@ -56,7 +56,7 @@ def display_table(data):
 data = load_data()
 
 # Create tabs with Daily Summary as the first tab
-tab1, tab2 = st.tabs(["Daily Summary", "상품 데이터 테이블"])
+tab1, tab2 = st.tabs(["판매현황", "상품 데이터 테이블"])
 
 with tab1:
     display_daily_summary(data)
