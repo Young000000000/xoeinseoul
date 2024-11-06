@@ -10,7 +10,7 @@ def load_data(filename="xoeinseoul.csv"):
 
 # Display the daily summary with overall sum table
 def display_daily_summary(data):
-    st.title("Daily Summary")
+#    st.title("Daily Summary")
     
     # Calculate daily summary
     daily_summary = data.groupby('판매일').agg(
@@ -44,7 +44,7 @@ def display_daily_summary(data):
 
 # Display the full data table without index, sorted by '판매일' in descending order
 def display_table(data):
-    st.title("상품 데이터 테이블")
+#    st.title("상품 데이터 테이블")
     
     # Sort by '판매일' in descending order
     data = data.sort_values(by='판매일', ascending=False).reset_index(drop=True)
