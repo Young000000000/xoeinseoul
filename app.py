@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load data from CSV file
-def load_data(filename="xoeinseoul.csv"):
+def load_data(filename="garment_data.csv"):
     data = pd.read_csv(filename)
     data['구매확정일'] = pd.to_datetime(data['구매확정일']).dt.date  # Show only date for purchase_confirmed_at
     data['판매일'] = pd.to_datetime(data['판매일']).dt.date         # Show only date for created_at
@@ -11,9 +11,6 @@ def load_data(filename="xoeinseoul.csv"):
 # Display the daily summary with overall sum table
 def display_daily_summary(data):
     st.title("Daily Summary")
-    
-    # Convert '판매일' to datetime if not already
-    data['판매일'] = pd.to_datetime(data['판매일']).dt.date
     
     # Calculate daily summary
     daily_summary = data.groupby('판매일').agg(
@@ -39,24 +36,30 @@ def display_daily_summary(data):
     
     # Display overall summary at the top without index
     st.write("### 전체 판매 요약")
-    st.dataframe(overall_summary, use_container_width=True)
+    st.dataframe(overall_summary.style.hide_index(), use_container_width=True)
 
     # Display daily summary table without index
     st.write("### 일별 판매 요약")
-    st.dataframe(daily_summary, use_container_width=True)
+    st.dataframe(daily_summary.style.hide_index(), use_container_width=True)
 
-# Display the full data table without index
+# Display the full data table without index, sorted by '판매일' in descending order
 def display_table(data):
     st.title("상품 데이터 테이블")
+    
+    # Sort by '판매일' in descending order
+    data = data.sort_values(by='판매일', ascending=False).reset_index(drop=True)
+    
     # Format price column with commas and no decimals
     data['판매가격'] = data['판매가격'].apply(lambda x: f"{int(x):,}")
-    st.dataframe(data.reset_index(drop=True), use_container_width=True)  # Remove index
+    
+    # Display the data table without index
+    st.dataframe(data.style.hide_index(), use_container_width=True)
 
 # Load data from CSV
 data = load_data()
 
 # Create tabs with Daily Summary as the first tab
-tab1, tab2 = st.tabs(["판매현황", "상품 데이터 테이블"])
+tab1, tab2 = st.tabs(["Daily Summary", "상품 데이터 테이블"])
 
 with tab1:
     display_daily_summary(data)
