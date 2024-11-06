@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load data from CSV file
-def load_data(filename="garment_data.csv"):
+def load_data(filename="xoeinseoul.csv"):
     data = pd.read_csv(filename)
     return data
 
