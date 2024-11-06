@@ -27,7 +27,7 @@ def daily_summary(data):
     # Display daily summary
     st.write(daily_summary)
 
-# Load data from CSV
+# Load data from CSV 
 data = load_data()
 
 # Streamlit sidebar for navigation
