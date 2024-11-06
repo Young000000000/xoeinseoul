@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load data from CSV file
-def load_data(filename="garment_data.csv"):
+def load_data(filename="xoeinseoul.csv"):
     data = pd.read_csv(filename)
     data['구매확정일'] = pd.to_datetime(data['구매확정일']).dt.date  # Show only date for purchase_confirmed_at
     data['판매일'] = pd.to_datetime(data['판매일']).dt.date         # Show only date for created_at
