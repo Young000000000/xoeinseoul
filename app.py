@@ -36,11 +36,11 @@ def display_daily_summary(data):
     
     # Display overall summary at the top without index
     st.write("### 전체 판매 요약")
-    st.dataframe(overall_summary.style.hide_index(), use_container_width=True)
-
+    st.write(overall_summary)
+    
     # Display daily summary table without index
     st.write("### 일별 판매 요약")
-    st.dataframe(daily_summary.style.hide_index(), use_container_width=True)
+    st.write(daily_summary)
 
 # Display the full data table without index, sorted by '판매일' in descending order
 def display_table(data):
@@ -53,7 +53,7 @@ def display_table(data):
     data['판매가격'] = data['판매가격'].apply(lambda x: f"{int(x):,}")
     
     # Display the data table without index
-    st.dataframe(data.style.hide_index(), use_container_width=True)
+    st.write(data)
 
 # Load data from CSV
 data = load_data()
