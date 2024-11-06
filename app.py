@@ -21,38 +21,36 @@ def display_daily_summary(data):
         총판매액=('판매가격', 'sum')
     ).reset_index()
     
-    # Calculate average price for each day
-    daily_summary['평균 가격'] = daily_summary['총판매액'] / daily_summary['판매량']
+    # Calculate average price for each day without decimal
+    daily_summary['평균 가격'] = (daily_summary['총판매액'] / daily_summary['판매량']).astype(int)
     
     # Format currency columns without decimals and with comma
-    daily_summary['총판매액'] = daily_summary['총판매액'].apply(lambda x: f"{int(x):,}")
-    daily_summary['평균 가격'] = daily_summary['평균 가격'].apply(lambda x: f"{int(x):,}")
+    daily_summary['총판매액'] = daily_summary['총판매액'].apply(lambda x: f"{x:,}")
+    daily_summary['평균 가격'] = daily_summary['평균 가격'].apply(lambda x: f"{x:,}")
     
     # Calculate overall summary
+    total_sales_count = daily_summary['판매량'].sum()
+    total_sales_amount = daily_summary['총판매액'].str.replace(',', '').astype(int).sum()
     overall_summary = pd.DataFrame({
-        "전체 판매량": [daily_summary['판매량'].sum()],
-        "전체 판매액": [int(daily_summary['총판매액'].str.replace(',', '').astype(int).sum())],
-        "전체 평균 가격": [int(daily_summary['총판매액'].str.replace(',', '').astype(int).sum() / daily_summary['판매량'].sum())]
+        "전체 판매량": [total_sales_count],
+        "전체 판매액": [f"{total_sales_amount:,}"],
+        "전체 평균 가격": [f"{(total_sales_amount / total_sales_count):,.0f}"]
     })
-    
-    # Format overall summary columns with comma and no decimals
-    overall_summary["전체 판매액"] = overall_summary["전체 판매액"].apply(lambda x: f"{x:,}")
-    overall_summary["전체 평균 가격"] = overall_summary["전체 평균 가격"].apply(lambda x: f"{x:,}")
     
     # Display overall summary at the top without index
     st.write("### 전체 판매 요약")
-    st.dataframe(overall_summary)
+    st.dataframe(overall_summary, use_container_width=True)
 
     # Display daily summary table without index
     st.write("### 일별 판매 요약")
-    st.dataframe(daily_summary)
+    st.dataframe(daily_summary, use_container_width=True)
 
 # Display the full data table without index
 def display_table(data):
     st.title("상품 데이터 테이블")
     # Format price column with commas and no decimals
     data['판매가격'] = data['판매가격'].apply(lambda x: f"{int(x):,}")
-    st.dataframe(data.reset_index(drop=True))  # Remove index
+    st.dataframe(data.reset_index(drop=True), use_container_width=True)  # Remove index
 
 # Load data from CSV
 data = load_data()
