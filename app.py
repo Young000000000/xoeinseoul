@@ -10,6 +10,7 @@ def load_data(filename="xoeinseoul.csv"):
 
 # Display the daily and monthly summary with overall sum table
 def display_summaries(data):
+    data = data[data.status_id==900]
     # Calculate daily summary
     daily_summary = data.groupby('판매일').agg(
         판매량=('상품id', 'count'),
