@@ -5,14 +5,14 @@ import pandas as pd
 def load_data(filename="xoeinseoul.csv"):
     data = pd.read_csv(filename)
     data['구매확정일'] = pd.to_datetime(data['구매확정일']).dt.date  # Show only date for purchase_confirmed_at
-    data['판매일'] = pd.to_datetime(data['판매일']).dt.date         # Show only date for created_at
+    data['주문일'] = pd.to_datetime(data['주문일']).dt.date         # Show only date for created_at
     return data
 
 # Display the daily and monthly summary with overall sum table
 def display_summaries(data):
     data = data[data.status_id==900]
     # Calculate daily summary
-    daily_summary = data.groupby('판매일').agg(
+    daily_summary = data.groupby('주문일').agg(
         판매량=('상품id', 'count'),
         총판매액=('판매가격', 'sum')
     ).reset_index()
@@ -38,8 +38,8 @@ def display_summaries(data):
     st.write(overall_summary)
     
     # Calculate and display monthly summary
-    data['판매월'] = pd.to_datetime(data['판매일']).dt.to_period('M')
-    monthly_summary = data.groupby('판매월').agg(
+    data['주문월'] = pd.to_datetime(data['주문일']).dt.to_period('M')
+    monthly_summary = data.groupby('주문월').agg(
         판매량=('상품id', 'count'),
         총판매액=('판매가격', 'sum')
     ).reset_index()
@@ -59,10 +59,10 @@ def display_summaries(data):
     st.write("### 일별 판매 요약")
     st.write(daily_summary)
 
-# Display the full data table without index, sorted by '판매일' in descending order
+# Display the full data table without index, sorted by '주문일' in descending order
 def display_table(data):
-    # Sort by '판매일' in descending order
-    data = data.sort_values(by='판매일', ascending=False).reset_index(drop=True)
+    # Sort by '주문일' in descending order
+    data = data.sort_values(by='주문일', ascending=False).reset_index(drop=True)
     
     # Format price column with commas and no decimals
     data['판매가격'] = data['판매가격'].apply(lambda x: f"{int(x):,}")
