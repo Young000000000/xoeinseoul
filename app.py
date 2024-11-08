@@ -71,7 +71,7 @@ def display_table(data):
     
     # Format price column with commas and no decimals
     data['판매가격'] = data['판매가격'].apply(lambda x: f"{int(x):,}")
-    data = data[["품번", "상품명", "판매가격", "주문일", "구매확정일", "브랜드", "상품id"]]
+    data = data[["주문일", "구매확정일", "품번", "상품명", "판매가격", "브랜드", "상품id"]]
     # Display the data table in wide mode without index
     st.dataframe(data, use_container_width=True)
 
